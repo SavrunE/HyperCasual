@@ -10,6 +10,7 @@ public class Character : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     public float JumpPower { get { return jumpPower; } }
     [SerializeField] private float jumpPower = 400f;
+    Vector2 moveInput;
 
     private bool IsGrounded = true;
 
@@ -20,10 +21,15 @@ public class Character : MonoBehaviour
     }
     void FixedUpdate()
     {
+        body.AddForce(body.position + new Vector2(Joystick.Horizontal, 0) * MoveSpeed * Time.fixedDeltaTime);
+    }
+    private void Update()
+    {
         if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
         {
-            body.AddForce(Vector2.up * JumpPower);
+            moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
+            body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
+           
         }
-        body.MovePosition(body.position + new Vector2(Joystick.Horizontal, 0) * MoveSpeed * Time.fixedDeltaTime);
     }
 }
