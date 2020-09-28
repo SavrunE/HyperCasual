@@ -10,10 +10,10 @@ public class Character : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     public float JumpPower { get { return jumpPower; } }
     [SerializeField] private float jumpPower = 400f;
-    Vector2 moveInput;
 
-    private bool IsGrounded = true;
+    private bool isGrounded = true;
 
+    [SerializeField] Transform groundCheker;
     Rigidbody2D body;
     void Start()
     {
@@ -21,15 +21,32 @@ public class Character : MonoBehaviour
     }
     void FixedUpdate()
     {
-        body.AddForce(body.position + new Vector2(Joystick.Horizontal, 0) * MoveSpeed * Time.fixedDeltaTime);
+        if (isGrounded)
+            Move();
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded)
+        CheckGround();
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
-            body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
-           
+            Jump();
         }
+    }
+
+    private void CheckGround()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheker.position,0.1f);
+
+        isGrounded = colliders.Length > 0;
+    }
+
+    private void Move()
+    {
+        body.velocity = new Vector2(Joystick.Horizontal * MoveSpeed , body.velocity.y);
+    }
+    private void Jump()
+    {
+        Vector2 moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
+        body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
     }
 }
