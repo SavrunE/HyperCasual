@@ -9,7 +9,7 @@ public class Character : MonoBehaviour
     public float MoveSpeed { get { return moveSpeed; } }
     [SerializeField] private float moveSpeed = 5f;
     public float JumpPower { get { return jumpPower; } }
-    [SerializeField] private float jumpPower = 400f;
+    [SerializeField] private float jumpPower = 10f;
 
     private bool isGrounded = true;
 

@@ -9,9 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05ededc22512d634abb87ee7dd275a19, type: 3}
-  m_Name: php
+  m_Script: {fileID: 11500000, guid: 42d0b8380001ca248967c3bb93466e0a, type: 3}
+  m_Name: Bomb
   m_EditorClassIdentifier: 
-  mainSprite: {fileID: 0}
-  speed: 0
-  attack: 0
+  Name: Bomb
+  Description: Brings destruction to the environment.
+  Sprite: {fileID: 21300000, guid: fc97ccf59fb092546ba0bebe3e9e0142, type: 3}
+  Attack: 5
+  Defence: 0
+  Health: 1
+  Value: 50
