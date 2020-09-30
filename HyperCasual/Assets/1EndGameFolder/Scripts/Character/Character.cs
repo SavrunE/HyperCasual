@@ -12,6 +12,11 @@ public class Character : MonoBehaviour
     [SerializeField] private float jumpPower = 10f;
 
     private bool isGrounded = true;
+    private bool canJump = true;
+    private float jumpDelay = 1f;
+    private float checkJumpDelay = 1f;
+
+
 
     [SerializeField] Transform groundCheker;
     Rigidbody2D body;
@@ -21,15 +26,25 @@ public class Character : MonoBehaviour
     }
     void FixedUpdate()
     {
+        /// заменить на куратину
+        if (checkJumpDelay > 0)
+            checkJumpDelay -= Time.fixedDeltaTime;
+        else
+            canJump = true;
+        ///
         if (isGrounded)
             Move();
+       
     }
     private void Update()
     {
         CheckGround();
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canJump)
         {
+            checkJumpDelay = jumpDelay;
+               canJump = false;
             Jump();
+
         }
     }
 
@@ -37,7 +52,7 @@ public class Character : MonoBehaviour
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheker.position,0.1f);
 
-        isGrounded = colliders.Length > 0;
+        isGrounded = colliders.Length > 1;
     }
 
     private void Move()
@@ -48,5 +63,6 @@ public class Character : MonoBehaviour
     {
         Vector2 moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
         body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
+        canJump = false;
     }
 }

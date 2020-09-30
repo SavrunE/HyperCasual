@@ -15,6 +15,7 @@ public class EnemyData : MonoBehaviour
         OnSwordSelected.Raise(); // 2
     }
 
+
 }
 //Генерацию Game Event при выборе меча.
 //Генерацию события при нажатии на меч.

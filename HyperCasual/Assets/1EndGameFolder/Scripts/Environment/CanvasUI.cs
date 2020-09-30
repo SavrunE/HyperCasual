@@ -12,9 +12,6 @@ public class CanvasUI : MonoBehaviour
     [SerializeField] Text defence;
     [SerializeField] Text health;
     [SerializeField] Text value;
-    public void UpdateDisplayUI()
-    {
-
-    }
+    
 
 }
