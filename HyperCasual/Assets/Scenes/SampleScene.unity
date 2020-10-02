@@ -1181,9 +1181,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Joystick: {fileID: 1178091349}
-  moveSpeed: 5
+  moveSpeed: 500
   jumpPower: 3.5
-  extraJumpValue: 2
   groundCheker: {fileID: 834407061}
 --- !u!70 &444068535
 CapsuleCollider2D:
@@ -1357,6 +1356,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1372,6 +1372,20 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3eba435ddfa5740a20504e0fb529dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerPosition: {fileID: 444068531}
+  CameraPosition: {x: 0, y: 0, z: 0}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -1998,7 +2012,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 834407060}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.003, y: -0.236, z: 0}
+  m_LocalPosition: {x: -0.003, y: -0.213, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 444068537}

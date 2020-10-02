@@ -8,17 +8,18 @@ public class Character : MonoBehaviour
 {
     public Joystick Joystick;
     public float MoveSpeed { get { return moveSpeed; } }
-    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float moveSpeed = 350f;
     public float JumpPower { get { return jumpPower; } }
     [SerializeField] private float jumpPower = 3.5f;
 
     private bool lookOnLeft = false;
     private bool isGrounded = true;
     private bool canJump = true;
-    private float jumpDelay = 1f;
+    private float jumpDelay = 0.5f;
+    private bool canCheckGround = true;
+
     private int extraJump = 2;
     private int extraJumpCheck;
-    private bool jumpDirection;
 
     Animator animator;
     Rigidbody2D body;
@@ -30,36 +31,63 @@ public class Character : MonoBehaviour
         animator = GetComponent<Animator>();
         body = GetComponent<Rigidbody2D>();
     }
+
     void FixedUpdate()
     {
         if (isGrounded)
             Move();
+        else
+            SeparatorAnimation(body.velocity.y, "JumpUp");
 
-    }
-    private void Update()
-    {
         if (lookOnLeft == true && body.velocity.x > 0)
             Flip();
         else if (lookOnLeft == false && body.velocity.x < 0)
             Flip();
+    }
 
+    private void Update()
+    {
         CheckGround();
+
         if (Input.GetKeyDown(KeyCode.Space) && canJump)
         {
-            StartCoroutine(JumpWaiter());
             Jump();
         }
     }
-    IEnumerator JumpWaiter()
+    IEnumerator JumpTimer()
     {
         canJump = false;
-        yield return new WaitForSeconds(jumpDelay);
+        canCheckGround = false;
+        yield return new WaitForSeconds(jumpDelay / 2);
+        canCheckGround = true;
+
+        
+        yield return new WaitForSeconds(jumpDelay / 2);
         extraJumpCheck--;
         if (extraJumpCheck > 0)
             canJump = true;
-
     }
 
+    private void Jump()
+    {
+        Vector2 moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
+        body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
+        animator.SetBool("IsGrounded", false);
+        animator.SetBool("Moving", false);
+        StartCoroutine(JumpTimer());
+    }
+
+    private void Move()
+    {
+        body.velocity = new Vector2(Joystick.Horizontal * MoveSpeed * Time.fixedDeltaTime, body.velocity.y);
+        if (body.velocity.x == 0)
+        {
+            animator.SetBool("Moving", false);
+        }
+        else
+            if (isGrounded && canCheckGround)
+            animator.SetBool("Moving", true);
+    }
 
     private void CheckGround()
     {
@@ -67,51 +95,26 @@ public class Character : MonoBehaviour
 
         isGrounded = colliders.Length > 1;
         /// сделать через касание ножками, каждый фрейм вызывать - это бред
-        /// UPD странно, все так делают...
-        if (isGrounded)
+        /// UPD странно, все делают так...
+        if (isGrounded && canCheckGround)
         {
-            canJump = true;
-            extraJumpCheck = extraJump;
-            animator.SetBool("IsGrounded", true);
-        }
-        else
-        {
-            SeparatorAnimation(body.velocity.y, "JumpUp");
-            animator.SetBool("IsGrounded", false);
-            animator.SetBool("Moving", false);
+            
+            
+                animator.SetBool("IsGrounded", true);
+                canJump = true;
+                extraJumpCheck = extraJump;
+            
         }
     }
 
     private void SeparatorAnimation(float velocityDirection, string boolValue)
     {
         if (velocityDirection > 0)
-        {
             animator.SetBool(boolValue, true);
-        }
         else
-        {
-            animator.SetBool(boolValue, false);
-        }
+        animator.SetBool(boolValue, false);
+    }
 
-    }
-    private void Move()
-    {
-        body.velocity = new Vector2(Joystick.Horizontal * MoveSpeed, body.velocity.y);
-        if (body.velocity.x == 0)
-        {
-            animator.SetBool("Moving", false);
-        }
-        else
-            animator.SetBool("Moving", true);
-    }
-    private void Jump()
-    {
-        Vector2 moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
-        body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
-        
-        isGrounded = false;
-
-    }
     private void Flip()
     {
         lookOnLeft = !lookOnLeft;
