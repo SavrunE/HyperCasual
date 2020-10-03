@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Character : MonoBehaviour
 {
+    public static Character Instance = null;
     public Joystick Joystick;
     public float MoveSpeed { get { return moveSpeed; } }
     [SerializeField] private float moveSpeed = 350f;
@@ -26,6 +27,20 @@ public class Character : MonoBehaviour
 
     [SerializeField] Transform groundCheker;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        { // Экземпляр менеджера был найден
+            Instance = this; // Задаем ссылку на экземпляр объекта
+        }
+        else if (Instance == this)
+        { // Экземпляр объекта уже существует на сцене
+            Destroy(gameObject); // Удаляем объект
+        }
+        DontDestroyOnLoad(gameObject);
+        InitializeManager();
+    }
+   
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -61,7 +76,6 @@ public class Character : MonoBehaviour
         yield return new WaitForSeconds(jumpDelay / 2);
         canCheckGround = true;
 
-        
         yield return new WaitForSeconds(jumpDelay / 2);
         extraJumpCheck--;
         if (extraJumpCheck > 0)
@@ -98,12 +112,12 @@ public class Character : MonoBehaviour
         /// UPD странно, все делают так...
         if (isGrounded && canCheckGround)
         {
-            
-            
-                animator.SetBool("IsGrounded", true);
-                canJump = true;
-                extraJumpCheck = extraJump;
-            
+
+
+            animator.SetBool("IsGrounded", true);
+            canJump = true;
+            extraJumpCheck = extraJump;
+
         }
     }
 
@@ -112,7 +126,7 @@ public class Character : MonoBehaviour
         if (velocityDirection > 0)
             animator.SetBool(boolValue, true);
         else
-        animator.SetBool(boolValue, false);
+            animator.SetBool(boolValue, false);
     }
 
     private void Flip()
@@ -121,5 +135,9 @@ public class Character : MonoBehaviour
         Vector3 Scaler = transform.localScale;
         Scaler.x *= -1;
         transform.localScale = Scaler;
+    }
+    private void InitializeManager()
+    {
+        /* TODO: Здесь мы будем проводить инициализацию */
     }
 }

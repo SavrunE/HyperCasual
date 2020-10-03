@@ -1,21 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class EnemyData : MonoBehaviour
+[CreateAssetMenu(fileName = "Enemy", menuName = "Enemy/Default")]
+public class EnemyData : ScriptableObject
 {
-    [SerializeField] Enemy enemy;
+    public string Name;
+    public string Description;
 
-    [SerializeField]
-    private GameEvent OnSwordSelected; // 1
+    public Sprite Sprite;
 
-    private void OnMouseDown()
+    public int Attack;
+    public int Defence;
+    public int Health;
+    public int Value;
+
+    public float MoveSpeed;
+    public Vector2 DirectionMove;
+    
+
+    public void PrintInfo()
     {
-        OnSwordSelected.Raise(); // 2
+        Debug.Log("Name: " + Name + " - " + Description);
     }
-
-
 }
-//Генерацию Game Event при выборе меча.
-//Генерацию события при нажатии на меч.

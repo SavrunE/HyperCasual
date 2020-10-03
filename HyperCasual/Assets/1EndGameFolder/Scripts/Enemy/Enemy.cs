@@ -1,21 +1,30 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Enemy", menuName = "Enemy/Default")]
-public class Enemy : ScriptableObject
+[RequireComponent(typeof(Rigidbody2D))]
+public class Enemy : MonoBehaviour
 {
-    public string Name;
-    public string Description;
+    [SerializeField] EnemyData data;
+    Rigidbody2D body;
+    public static Action<GameObject> OnEnemyOverFly;
+    [SerializeField] float distanceToDestroy = 20f;
 
-    public Sprite Sprite;
+    public float Attack { get { return data.Attack; } }
 
-    public int Attack;
-    public int Defence;
-    public int Health;
-    public int Value;
-    public void PrintInfo()
+    private void Start()
     {
-        Debug.Log("Name: " + Name + " - " + Description);
+        body = GetComponent<Rigidbody2D>();
+    }
+    private void FixedUpdate()
+    {
+        body.velocity = data.DirectionMove * data.MoveSpeed * Time.fixedDeltaTime;
+        if (Character.Instance.transform.position.magnitude > transform.position.magnitude + distanceToDestroy)
+            OnEnemyOverFly(gameObject);
+    }
+    public void Init(EnemyData data)
+    {
+        this.data = data;
     }
 }
