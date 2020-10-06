@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
     [Tooltip("Список настроек для врагов")]
     [SerializeField] private List<EnemyData> enemySettings;
+    public static Dictionary<GameObject, Enemy> Enemies;
+    
+    [Tooltip("Список настроек для монет")]
+    [SerializeField] private List<EnemyData> coinSettings;
+    public static Dictionary<GameObject, Coin> Coins;
+
     [Tooltip("Количество объектов для вызова")]
     [SerializeField] private int poolCount;
     [Tooltip("Ссылка на базовый префаб")]
@@ -13,12 +19,12 @@ public class EnemySpawner : MonoBehaviour
     [Tooltip("Время между спауном врагов")]
     [SerializeField] private float spawnTime;
     [Tooltip("Расстояние по х от персонажа, для спавна врага")]
-    [SerializeField] private float spawnXPosition = 20f;
+    [SerializeField] private float scatterSpawnXPosition = 20f;
     [Tooltip("Расстояние по y от персонажа, для спавна врага")]
-    [SerializeField] private float spawnYPosition = 20f;
+    [SerializeField] private float scatterSpawnYPosition = 20f;
 
 
-    public static Dictionary<GameObject, Enemy> Enemies;
+    
 
     //Oueue - очередь
     private Queue<GameObject> currentEnemies;
@@ -60,8 +66,8 @@ public class EnemySpawner : MonoBehaviour
                 script.Init(enemySettings[random]);
 
                 var characterPosition = Character.Instance.transform.position;
-                float xPosition = Random.Range(characterPosition.x - spawnXPosition, characterPosition.x + spawnXPosition);
-                float yPosition = characterPosition.y + spawnYPosition;
+                float xPosition = Random.Range(characterPosition.x - scatterSpawnXPosition, characterPosition.x + scatterSpawnXPosition);
+                float yPosition = characterPosition.y + scatterSpawnYPosition;
                 enemy.transform.position = new Vector2(xPosition, yPosition);
             }
         }

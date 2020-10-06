@@ -13,6 +13,10 @@ public class Character : MonoBehaviour
     public float JumpPower { get { return jumpPower; } }
     [SerializeField] private float jumpPower = 3.5f;
 
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float health;
+    public float Health { get { return health; } }
+
     private bool lookOnLeft = false;
     private bool isGrounded = true;
     private bool canJump = true;
@@ -21,6 +25,8 @@ public class Character : MonoBehaviour
 
     private int extraJump = 2;
     private int extraJumpCheck;
+
+    [SerializeField] private float timeAfterDead = 1f;
 
     Animator animator;
     Rigidbody2D body;
@@ -38,15 +44,13 @@ public class Character : MonoBehaviour
             Destroy(gameObject); // Удаляем объект
         }
         DontDestroyOnLoad(gameObject);
-        InitializeManager();
     }
-   
     void Start()
     {
+        health = maxHealth;
         animator = GetComponent<Animator>();
         body = GetComponent<Rigidbody2D>();
     }
-
     void FixedUpdate()
     {
         if (isGrounded)
@@ -59,7 +63,6 @@ public class Character : MonoBehaviour
         else if (lookOnLeft == false && body.velocity.x < 0)
             Flip();
     }
-
     private void Update()
     {
         CheckGround();
@@ -81,7 +84,6 @@ public class Character : MonoBehaviour
         if (extraJumpCheck > 0)
             canJump = true;
     }
-
     private void Jump()
     {
         Vector2 moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
@@ -90,7 +92,6 @@ public class Character : MonoBehaviour
         animator.SetBool("Moving", false);
         StartCoroutine(JumpTimer());
     }
-
     private void Move()
     {
         body.velocity = new Vector2(Joystick.Horizontal * MoveSpeed * Time.fixedDeltaTime, body.velocity.y);
@@ -102,7 +103,6 @@ public class Character : MonoBehaviour
             if (isGrounded && canCheckGround)
             animator.SetBool("Moving", true);
     }
-
     private void CheckGround()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheker.position, 0.1f);
@@ -112,15 +112,11 @@ public class Character : MonoBehaviour
         /// UPD странно, все делают так...
         if (isGrounded && canCheckGround)
         {
-
-
             animator.SetBool("IsGrounded", true);
             canJump = true;
             extraJumpCheck = extraJump;
-
         }
     }
-
     private void SeparatorAnimation(float velocityDirection, string boolValue)
     {
         if (velocityDirection > 0)
@@ -128,7 +124,6 @@ public class Character : MonoBehaviour
         else
             animator.SetBool(boolValue, false);
     }
-
     private void Flip()
     {
         lookOnLeft = !lookOnLeft;
@@ -136,8 +131,32 @@ public class Character : MonoBehaviour
         Scaler.x *= -1;
         transform.localScale = Scaler;
     }
-    private void InitializeManager()
+    private void TakeDamage(float damage)
     {
-        /* TODO: Здесь мы будем проводить инициализацию */
+        if (damage > 0)
+            health -= damage;
+        else
+            health += damage;
+    }
+    IEnumerator Dead()
+    {
+        yield return new WaitForSeconds(timeAfterDead);
+        Debug.Log("HAHA u dead");
+        transform.position = new Vector2(0,0);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        var trigger = collision.gameObject;
+        if (Spawner.Enemies.ContainsKey(trigger)) 
+        {
+            float damage = Spawner.Enemies[trigger].Attack;
+            TakeDamage(damage);
+            if (Health <= 0)
+            {
+                StartCoroutine(Dead());
+            }
+            else
+                Debug.Log("take " + damage + " damage");
+        }
     }
 }
