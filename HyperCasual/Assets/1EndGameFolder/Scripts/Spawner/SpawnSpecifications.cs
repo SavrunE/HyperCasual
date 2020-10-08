@@ -4,18 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Enemy : MonoBehaviour
+public class SpawnSpecifications : MonoBehaviour
 {
-    [SerializeField] EnemyData data;
+    [SerializeField] SpawnData data;
     Rigidbody2D body;
-    public static Action<GameObject> OnEnemyOverFly;
+    public static Action<GameObject> OnOverFly;
     [SerializeField] float distanceToDestroy = 100f;
     private float distance;
 
-    public float Attack { get { return data.Attack; } }
+    public float Attack { get { return data.Damage(); } }
 
     private void Start()
     {
+        if (gameObject.tag != "Interaction")
+            gameObject.tag = "Interaction";
         body = GetComponent<Rigidbody2D>();
     }
     private void FixedUpdate()
@@ -24,10 +26,10 @@ public class Enemy : MonoBehaviour
         distance = Vector3.Distance(Character.Instance.transform.position, transform.position);
         if (distance > distanceToDestroy)
         {
-            OnEnemyOverFly(gameObject);
+            OnOverFly(gameObject);
         }
     }
-    public void Init(EnemyData data)
+    public void Init(SpawnData data)
     {
         this.data = data;
     }

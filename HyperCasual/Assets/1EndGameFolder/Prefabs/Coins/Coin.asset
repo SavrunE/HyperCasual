@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d0b8380001ca248967c3bb93466e0a, type: 3}
-  m_Name: Bomb
+  m_Script: {fileID: 11500000, guid: 951b59644dff7ea4db33e770bf5c2a34, type: 3}
+  m_Name: Coin
   m_EditorClassIdentifier: 
-  Name: Bomb
-  Description: Destroyed through some time after touch.
-  Sprite: {fileID: 0}
-  MoveSpeed: 150
-  DirectionMove: {x: 0, y: -1}
-  Attack: 5
-  Defence: 0
-  Health: 10
-  TimeToDestroy: 1
+  Name: OneCoin
+  Description: One coin
+  Sprite: {fileID: 21300000, guid: 5ed5157cf45e6ee409511594fb89377b, type: 3}
+  Value: 0
+  MoveSpeed: 0
+  DirectionMove: {x: 0, y: 0}

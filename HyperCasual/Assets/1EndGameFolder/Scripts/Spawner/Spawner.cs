@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    [Tooltip("Описание объектов для спавна")]
+    [SerializeField] string description;
     [Tooltip("Список настроек для врагов")]
     [SerializeField] private List<EnemyData> enemySettings;
-    public static Dictionary<GameObject, Enemy> Enemies;
-    
-    [Tooltip("Список настроек для монет")]
-    [SerializeField] private List<EnemyData> coinSettings;
-    public static Dictionary<GameObject, Coin> Coins;
+    public static Dictionary<GameObject, SpawnSpecifications> Spawners;
 
     [Tooltip("Количество объектов для вызова")]
     [SerializeField] private int poolCount;
@@ -27,22 +25,22 @@ public class Spawner : MonoBehaviour
     
 
     //Oueue - очередь
-    private Queue<GameObject> currentEnemies;
+    private Queue<GameObject> currentSpawners;
 
     private void Start()
     {
-        Enemies = new Dictionary<GameObject, Enemy>();
-        currentEnemies = new Queue<GameObject>();
+        Spawners = new Dictionary<GameObject, SpawnSpecifications>();
+        currentSpawners = new Queue<GameObject>();
 
         for (int i = 0; i < poolCount; ++i)
         {
             var prefab = Instantiate(basePrefab);
-            var script = prefab.GetComponent<Enemy>();
+            var script = prefab.GetComponent<SpawnSpecifications>();
             prefab.SetActive(false);
-            Enemies.Add(prefab, script);
-            currentEnemies.Enqueue(prefab);
+            Spawners.Add(prefab, script);
+            currentSpawners.Enqueue(prefab);
         }
-        Enemy.OnEnemyOverFly += ReturnEnemy;
+        SpawnSpecifications.OnOverFly += ReturnObject;
         StartCoroutine(Spawn());
     }
     IEnumerator Spawn()
@@ -54,11 +52,11 @@ public class Spawner : MonoBehaviour
         }
         while (true){ 
         yield return new WaitForSeconds(spawnTime);
-            if (currentEnemies.Count > 0)
+            if (currentSpawners.Count > 0)
             {
                 //получение компонентов и активанция врага
-                var enemy = currentEnemies.Dequeue();
-                var script = Enemies[enemy];
+                var enemy = currentSpawners.Dequeue();
+                var script = Spawners[enemy];
                 enemy.SetActive(true);
 
                 //генерация случайного врага и инициализация его
@@ -72,10 +70,10 @@ public class Spawner : MonoBehaviour
             }
         }
     }
-    private void ReturnEnemy(GameObject enemy)
+    private void ReturnObject(GameObject returnObject)
     {
-        enemy.transform.position = transform.position;
-        enemy.SetActive(false);
-        currentEnemies.Enqueue(enemy);
+        returnObject.transform.position = transform.position;
+        returnObject.SetActive(false);
+        currentSpawners.Enqueue(returnObject);
     }
 }

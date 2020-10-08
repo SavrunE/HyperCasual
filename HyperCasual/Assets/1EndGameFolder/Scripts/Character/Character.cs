@@ -142,21 +142,26 @@ public class Character : MonoBehaviour
     {
         yield return new WaitForSeconds(timeAfterDead);
         Debug.Log("HAHA u dead");
-        transform.position = new Vector2(0,0);
+        transform.position = new Vector2(0, 0);
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        var trigger = collision.gameObject;
-        if (Spawner.Enemies.ContainsKey(trigger)) 
+        SpawnSpecifications trigger = collision.gameObject.GetComponent<SpawnSpecifications>();
+        if (trigger)
         {
-            float damage = Spawner.Enemies[trigger].Attack;
+            float damage = 0;
+            if (trigger)
+                damage = trigger.Attack;
             TakeDamage(damage);
             if (Health <= 0)
-            {
                 StartCoroutine(Dead());
-            }
             else
                 Debug.Log("take " + damage + " damage");
+            SpawnSpecifications.OnOverFly(collision.gameObject);
         }
     }
 }

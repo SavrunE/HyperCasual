@@ -777,66 +777,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &137123084
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 137123086}
-  - component: {fileID: 137123085}
-  - component: {fileID: 137123087}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &137123085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137123084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c2d92b4dada93644bd9bf11385d3ce1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  component: 2
-  componentName: Second
-  variableComponentFirst: 0
-  variableComponentSecond: 0
---- !u!4 &137123086
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137123084}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &137123087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 137123084}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96811225c410ac84ca45f1f5bc3c0e65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &148590023
 GameObject:
   m_ObjectHideFlags: 0
@@ -3258,9 +3198,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac7f753daa78ed44fbf0406594bdc050, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  description: "\u0412\u0440\u0430\u0433\u0438"
   enemySettings:
   - {fileID: 11400000, guid: c17464ff1b9cef040824c7ce9b14870c, type: 2}
-  coinSettings: []
   poolCount: 1000
   basePrefab: {fileID: 6039844636325388788, guid: e777a3f906372d5488b67eb71234287a, type: 3}
   spawnTime: 0.1

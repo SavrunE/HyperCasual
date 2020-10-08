@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinData : MonoBehaviour
+[CreateAssetMenu(fileName = "Coin", menuName = "Spawner/Coin")]
+public class CoinData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public string Name;
+    public string Description;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Sprite Sprite;
+
+    public int Value;
+
+    public float MoveSpeed;
+    public Vector2 DirectionMove;
 }
