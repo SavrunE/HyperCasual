@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -7,8 +8,9 @@ public class Spawner : MonoBehaviour
     [Tooltip("Описание объектов для спавна")]
     [SerializeField] string description;
     [Tooltip("Список настроек для врагов")]
-    [SerializeField] private List<EnemyData> enemySettings;
-    public static Dictionary<GameObject, SpawnSpecifications> Spawners;
+    [SerializeField] private List<SpawnData> Setting;
+    private List<SpawnData> Settings;
+    public static Dictionary<GameObject, SpawnSpecifications> Spawners = new Dictionary<GameObject, SpawnSpecifications>();
 
     [Tooltip("Количество объектов для вызова")]
     [SerializeField] private int poolCount;
@@ -21,17 +23,18 @@ public class Spawner : MonoBehaviour
     [Tooltip("Расстояние по y от персонажа, для спавна врага")]
     [SerializeField] private float scatterSpawnYPosition = 20f;
 
-
-    
-
     //Oueue - очередь
-    private Queue<GameObject> currentSpawners;
+    private Queue<GameObject> currentSpawners = new Queue<GameObject>();
+
+
+
 
     private void Start()
     {
-        Spawners = new Dictionary<GameObject, SpawnSpecifications>();
-        currentSpawners = new Queue<GameObject>();
-
+        if (Settings == null)
+            Settings = Setting;
+        else
+            Settings.Union(Setting);
         for (int i = 0; i < poolCount; ++i)
         {
             var prefab = Instantiate(basePrefab);
@@ -47,11 +50,12 @@ public class Spawner : MonoBehaviour
     {
         if (spawnTime == 0)
         {
-            Debug.Log("Не выставленно время спауна в EnemySpawner, задано стандартное значение - 1сек");
+            Debug.Log("Не выставленно время спауна в подклассе SpawnData, задано стандартное значение - 1сек");
             spawnTime = 1f;
         }
-        while (true){ 
-        yield return new WaitForSeconds(spawnTime);
+        while (true)
+        {
+            yield return new WaitForSeconds(spawnTime);
             if (currentSpawners.Count > 0)
             {
                 //получение компонентов и активанция врага
@@ -60,8 +64,8 @@ public class Spawner : MonoBehaviour
                 enemy.SetActive(true);
 
                 //генерация случайного врага и инициализация его
-                int random = Random.Range(0, enemySettings.Count);
-                script.Init(enemySettings[random]);
+                int random = Random.Range(0, Settings.Count);
+                script.Init(Settings[random]);
 
                 var characterPosition = Character.Instance.transform.position;
                 float xPosition = Random.Range(characterPosition.x - scatterSpawnXPosition, characterPosition.x + scatterSpawnXPosition);

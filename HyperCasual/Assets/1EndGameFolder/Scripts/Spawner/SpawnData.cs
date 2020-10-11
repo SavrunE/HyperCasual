@@ -15,4 +15,8 @@ public abstract class SpawnData : ScriptableObject
     {
         return 0;
     }
+    public virtual int Coins()
+    {
+        return 0;
+    }
 }

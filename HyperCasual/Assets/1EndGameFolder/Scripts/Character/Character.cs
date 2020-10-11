@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(Animator))]
@@ -25,6 +26,9 @@ public class Character : MonoBehaviour
 
     private int extraJump = 2;
     private int extraJumpCheck;
+
+    private int coinsCollected;
+    public event Action<int> OnCoinTake;
 
     [SerializeField] private float timeAfterDead = 1f;
 
@@ -138,11 +142,16 @@ public class Character : MonoBehaviour
         else
             health += damage;
     }
+    public void TakeCoin(int value)
+    {
+        coinsCollected += value;
+        OnCoinTake.Invoke(coinsCollected);
+    }
     IEnumerator Dead()
     {
         yield return new WaitForSeconds(timeAfterDead);
         Debug.Log("HAHA u dead");
-        transform.position = new Vector2(0, 0);
+        transform.position = new Vector2(-5, 0);
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -153,15 +162,20 @@ public class Character : MonoBehaviour
         SpawnSpecifications trigger = collision.gameObject.GetComponent<SpawnSpecifications>();
         if (trigger)
         {
-            float damage = 0;
-            if (trigger)
-                damage = trigger.Attack;
-            TakeDamage(damage);
+            float damage = trigger.Data.Damage();
+            if (damage != 0)
+                TakeDamage(damage);
             if (Health <= 0)
                 StartCoroutine(Dead());
-            else
-                Debug.Log("take " + damage + " damage");
+            //Тут будет эвент получения урона
+            //else
+            //Debug.Log("take " + damage + " damage");
             SpawnSpecifications.OnOverFly(collision.gameObject);
+
+            int value = trigger.Data.Coins();
+            if (value != 0)
+                TakeCoin(trigger.Data.Coins());
+            
         }
     }
 }

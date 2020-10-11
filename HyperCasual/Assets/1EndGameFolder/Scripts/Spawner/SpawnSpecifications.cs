@@ -6,19 +6,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class SpawnSpecifications : MonoBehaviour
 {
-    [SerializeField] SpawnData data;
+    private SpawnData data;
+    public SpawnData Data { get { return data; } }
     Rigidbody2D body;
     public static Action<GameObject> OnOverFly;
     [SerializeField] float distanceToDestroy = 100f;
     private float distance;
 
-    public float Attack { get { return data.Damage(); } }
-
     private void Start()
     {
-        if (gameObject.tag != "Interaction")
-            gameObject.tag = "Interaction";
-        body = GetComponent<Rigidbody2D>();
+       body = GetComponent<Rigidbody2D>();
     }
     private void FixedUpdate()
     {
