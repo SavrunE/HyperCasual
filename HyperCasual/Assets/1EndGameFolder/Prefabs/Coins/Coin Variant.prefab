@@ -65,7 +65,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5290047046921019403, guid: e777a3f906372d5488b67eb71234287a, type: 3}
       propertyPath: distanceToDestroy
-      value: 50
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 6039844636325388788, guid: e777a3f906372d5488b67eb71234287a, type: 3}
       propertyPath: m_Name

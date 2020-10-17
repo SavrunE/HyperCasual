@@ -24,13 +24,13 @@ public class Spawner : MonoBehaviour
     [SerializeField] private float scatterSpawnYPosition = 20f;
 
     //Oueue - очередь
-    private Queue<GameObject> currentSpawners = new Queue<GameObject>();
-
+    private Queue<GameObject> currentSpawners;
 
 
 
     private void Start()
     {
+        currentSpawners = new Queue<GameObject>();
         if (Settings == null)
             Settings = Setting;
         else

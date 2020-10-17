@@ -90,6 +90,7 @@ public class Character : MonoBehaviour
     }
     private void Jump()
     {
+        body.velocity = Vector2.zero;
         Vector2 moveInput = new Vector2(Joystick.Horizontal, Joystick.Vertical);
         body.AddForce(moveInput.normalized * JumpPower, ForceMode2D.Impulse);
         animator.SetBool("IsGrounded", false);
@@ -169,8 +170,8 @@ public class Character : MonoBehaviour
                 StartCoroutine(Dead());
             //Тут будет эвент получения урона
             //else
-            //Debug.Log("take " + damage + " damage");
-            SpawnSpecifications.OnOverFly(collision.gameObject);
+            //  Debug.Log("take " + damage + " damage");
+            //SpawnSpecifications.OnOverFly(collision.gameObject);
 
             int value = trigger.Data.Coins();
             if (value != 0)
